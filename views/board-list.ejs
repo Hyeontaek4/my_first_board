@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>게시판 - 목록</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">게시판 목록</h1>
+      <a class="button" href="/board/new">새 글 작성</a>
+    </div>
+    <div class="subtitle">총 <%= total %>건 • 페이지 <%= page %> (페이지 크기 <%= pageSize %>)</div>
+
+    <ul class="card-list">
+      <% if (posts && posts.length) { %>
+        <% posts.forEach(function(p){ %>
+          <li class="card">
+            <h3><a href="/board/list/<%= p.id %>"><%= p.title %></a></h3>
+            <div class="meta">by <%= p.author %> • <%= new Date(p.createdAt).toLocaleString() %></div>
+          </li>
+        <% }) %>
+      <% } else { %>
+        <li class="card">게시글이 없습니다.</li>
+      <% } %>
+    </ul>
+
+    <nav class="pagination">
+      <% if (hasPrev) { %>
+        <a class="button" href="/board/list?page=<%= prevPage %>&pageSize=<%= pageSize %>">이전</a>
+      <% } else { %>
+        <span class="button" aria-disabled="true">이전</span>
+      <% } %>
+      <% if (hasNext) { %>
+        <a class="button" href="/board/list?page=<%= nextPage %>&pageSize=<%= pageSize %>">다음</a>
+      <% } else { %>
+        <span class="button" aria-disabled="true">다음</span>
+      <% } %>
+    </nav>
+
+    <div class="footer">Powered by Express + EJS</div>
+  </div>
+</body>
+</html>

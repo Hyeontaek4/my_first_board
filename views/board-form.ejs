@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title><%= mode === 'edit' ? '게시글 수정' : '새 글 작성' %> - 게시판</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    .form { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .form label { font-weight: 600; }
+    .form input[type="text"], .form textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); color: var(--fg); }
+    .form textarea { min-height: 200px; resize: vertical; }
+    .error { color: #b00020; font-size: 13px; margin-top: -6px; }
+    .actions { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-primary { background: #2563eb; color: white; border-color: #2563eb; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title"><%= mode === 'edit' ? '게시글 수정' : '새 글 작성' %></h1>
+    </div>
+
+    <% if (errors && errors._global) { %>
+      <div class="card" style="border-color:#b00020; color:#b00020"><%= errors._global %></div>
+    <% } %>
+
+    <form class="form" method="post" action="<%= mode === 'edit' ? ('/board/list/' + post.id + '/edit') : '/board' %>">
+      <div>
+        <label for="title">제목</label>
+        <input id="title" name="title" type="text" value="<%= post.title || '' %>" maxlength="200" required />
+        <% if (errors && errors.title) { %><div class="error"><%= errors.title %></div><% } %>
+      </div>
+      <div>
+        <label for="author">작성자</label>
+        <input id="author" name="author" type="text" value="<%= post.author || '' %>" maxlength="100" required />
+        <% if (errors && errors.author) { %><div class="error"><%= errors.author %></div><% } %>
+      </div>
+      <div>
+        <label for="content">내용</label>
+        <textarea id="content" name="content" required><%= post.content || '' %></textarea>
+        <% if (errors && errors.content) { %><div class="error"><%= errors.content %></div><% } %>
+      </div>
+      <div class="actions">
+        <button class="button btn-primary" type="submit"><%= mode === 'edit' ? '수정 완료' : '등록' %></button>
+        <% if (mode === 'edit') { %>
+          <a class="button" href="/board/list/<%= post.id %>">취소</a>
+        <% } else { %>
+          <a class="button" href="/board/list">취소</a>
+        <% } %>
+      </div>
+    </form>
+
+    <div class="footer">Powered by Express + EJS</div>
+  </div>
+</body>
+</html>
